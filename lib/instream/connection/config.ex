@@ -100,7 +100,7 @@ defmodule Instream.Connection.Config do
         host: "localhost",
         port: 8086,
         scheme: "http",
-        http_client: Instream.HTTPClient.Hackney,
+        http_client: Instream.HTTPClient.Req,
         loggers: [{Instream.Log.DefaultLogger, :log, []}],
         writer: Instream.Writer.Line,
         json_decoder: {Jason, :decode!, [[keys: :atoms]]},
@@ -121,15 +121,17 @@ defmodule Instream.Connection.Config do
 
   Internally all requests are done using the configured `:http_client`.
 
-  ### Instream.HTTPClient.Hackney
+  ### Instream.HTTPClient.Req
 
-  Default for not otherwise configured HTTP Client is `:hackney`.
+  Default for not otherwise configured HTTP Client is `Req`.
 
-  The configuration key `:http_opts` is directly passed to the client process.
-  Parts of it are also used internally by `:hackney` to control more generic
-  behaviour (request pool to be used and its configuration).
+  The configuration key `:http_opts` accepts options for `Req.request/1`, such
+  as `:receive_timeout`, `:connect_options` and `:finch`. Retries and redirects
+  are disabled by default, but can be enabled explicitly. Response bodies stay
+  binary so Instream can use the configured JSON decoder and `:result_as` option.
 
-  Please see `:hackney.request/5` for a complete list of available options.
+  Transport and protocol errors are returned as `{:error, exception}` tuples,
+  for example `{:error, %Req.TransportError{reason: :timeout}}`.
 
   Setting the `:http_opts` key when calling a connection method allows usage
   of per-call options. The options are merged with the connection options and
@@ -138,13 +140,12 @@ defmodule Instream.Connection.Config do
   #### Unix Socket Connections
 
   Some InfluxDB versions allow connecting via a unix socket. These sockets
-  have native support in `:hackney` with the appropriate configuration:
+  are supported with the following configuration:
 
       config :my_app, MyConnection,
-        scheme: "http+unix",
-        host: URI.encode_www_form("/path/to/influxdb.sock")
-
-  Please be aware that you need to encode the socket path yourself.
+        scheme: "http",
+        host: "localhost",
+        http_opts: [unix_socket: "/path/to/influxdb.sock"]
 
   ## JSON Library
 
@@ -248,7 +249,7 @@ defmodule Instream.Connection.Config do
     port: 8086,
     scheme: "http",
     version: :v1,
-    http_client: Instream.HTTPClient.Hackney,
+    http_client: Instream.HTTPClient.Req,
     writer: Instream.Writer.Line,
     json_decoder: {Jason, :decode!, [[keys: :atoms]]},
     json_encoder: {Jason, :encode!, []}

@@ -59,9 +59,9 @@ defmodule Instream.Connection.TimeoutTest do
 
     opts = [
       database: "timeout",
-      http_opts: [recv_timeout: timeout]
+      http_opts: [receive_timeout: timeout]
     ]
 
-    assert {:error, :timeout} = InetsConnection.query("", opts)
+    assert {:error, %Req.TransportError{reason: :timeout}} = InetsConnection.query("", opts)
   end
 end

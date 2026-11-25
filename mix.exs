@@ -3,14 +3,14 @@ defmodule Instream.MixProject do
 
   @url_changelog "https://hexdocs.pm/instream/changelog.html"
   @url_github "https://github.com/mneudert/instream"
-  @version "2.3.0-dev"
+  @version "3.0.0"
 
   def project do
     [
       app: :instream,
       name: "Instream",
       version: @version,
-      elixir: "~> 1.9",
+      elixir: "~> 1.15",
       aliases: aliases(),
       deps: deps(),
       description: "InfluxDB driver for Elixir",
@@ -41,16 +41,16 @@ defmodule Instream.MixProject do
 
   defp deps do
     [
-      {:benchee, "~> 1.4", only: :bench, runtime: false},
+      {:benchee, "~> 1.5", only: :bench, runtime: false},
       {:credo, "~> 1.7", only: :dev, runtime: false},
       {:dialyxir, "~> 1.4", only: :dev, runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.16.0", only: :test, runtime: false},
-      {:hackney, "~> 1.1"},
+      {:excoveralls, "~> 0.18.0", only: :test, runtime: false},
+      {:req, "~> 0.7.5"},
       {:influxql, "~> 0.2.0"},
-      {:jason, "~> 1.0"},
+      {:jason, "~> 1.4.5"},
       {:mox, "~> 1.0", only: :test},
-      {:nimble_csv, "~> 1.0"},
+      {:nimble_csv, "~> 1.3"},
       {:poolboy, "~> 1.5"},
       {:ranch, "~> 1.7.0", only: :test}
     ]

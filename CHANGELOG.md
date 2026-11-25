@@ -1,6 +1,13 @@
 # Changelog
 
-## v2.3.0-dev
+## v3.0.0
+
+- Backwards incompatible changes
+    - The default HTTP client is now `Instream.HTTPClient.Req` instead of hackney
+    - `http_opts` now accepts Req options (for example `receive_timeout` instead of `recv_timeout`, and `connect_options: [proxy: {scheme, host, port, options}]` for proxies)
+    - Unix socket connections now use `http_opts: [unix_socket: path]` instead of encoded `http+unix` URLs
+    - Transport and protocol errors now contain Req exceptions instead of hackney error reasons
+    - Minimum required Elixir version is now `~> 1.15`
 
 - Enhancements
     - Line protocol encoder sorts fields/tags before generating the payload

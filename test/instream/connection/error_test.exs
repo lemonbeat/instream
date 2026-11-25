@@ -4,7 +4,7 @@ defmodule Instream.Connection.ErrorTest do
   defmodule OptionsConnection do
     use Instream.Connection,
       config: [
-        http_opts: [proxy: "http://invalidproxy"],
+        http_opts: [connect_options: [proxy: {:http, "invalidproxy", 8080, []}]],
         loggers: []
       ]
   end
@@ -49,12 +49,12 @@ defmodule Instream.Connection.ErrorTest do
   test "reading data from an unresolvable host" do
     query = "SELECT * FROM connection_error_tests"
 
-    assert {:error, :nxdomain} = UnreachableConnection.query(query)
+    assert {:error, %Req.TransportError{reason: :nxdomain}} = UnreachableConnection.query(query)
   end
 
   test "writing data to an unresolvable host" do
     data = %TestSeries{}
 
-    assert {:error, :nxdomain} = UnreachableConnection.write(data)
+    assert {:error, %Req.TransportError{reason: :nxdomain}} = UnreachableConnection.write(data)
   end
 end

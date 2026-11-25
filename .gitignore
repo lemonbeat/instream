@@ -3,3 +3,5 @@ deps/
 doc/
 plts/
 test/tmp/
+.idea
+instream.iml

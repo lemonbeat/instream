@@ -112,10 +112,10 @@ defmodule Instream do
 
   ### Query Timeout Configuration
 
-  If you find your queries running into timeouts (e.g. `:hackney` not waiting
+  If you find your queries running into timeouts (e.g. `Req` not waiting
   long enough for a response) you can pass an option to the query call:
 
-      MyConnection.query(query, http_opts: [recv_timeout: 250])
+      MyConnection.query(query, http_opts: [receive_timeout: 250])
 
   This value can also be set as a default using your
   [HTTP client configuration](`Instream.Connection.Config`).

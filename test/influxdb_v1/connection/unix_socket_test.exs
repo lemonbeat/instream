@@ -12,15 +12,15 @@ defmodule Instream.InfluxDBv1.Connection.UnixSocketTest do
       config: [
         init: {__MODULE__, :init},
         loggers: [],
-        port: 0,
-        scheme: "http+unix"
+        host: "localhost",
+        scheme: "http"
       ]
 
     def init(conn) do
       config = [
         auth: TestConnection.config(:auth),
         database: TestConnection.config(:database),
-        host: "INFLUXDB_V1_SOCKET" |> System.fetch_env!() |> URI.encode_www_form()
+        http_opts: [unix_socket: System.fetch_env!("INFLUXDB_V1_SOCKET")]
       ]
 
       Application.put_env(:instream, conn, config)

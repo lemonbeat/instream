@@ -8,8 +8,8 @@ defmodule Instream.Connection.BodyReadErrorTest do
       otp_app: :instream,
       config: [
         loggers: [],
-        port: 0,
-        scheme: "http+unix"
+        host: "localhost",
+        scheme: "http"
       ]
   end
 
@@ -56,9 +56,9 @@ defmodule Instream.Connection.BodyReadErrorTest do
     socket_env =
       Keyword.merge(
         TestConnection.config(),
-        host: URI.encode_www_form(socket),
-        port: 0,
-        scheme: "http+unix"
+        host: "localhost",
+        scheme: "http",
+        http_opts: [unix_socket: socket]
       )
 
     Application.put_env(:instream, RanchSocketConnection, socket_env)
@@ -83,8 +83,8 @@ defmodule Instream.Connection.BodyReadErrorTest do
       assert :error = RanchSocketConnection.version()
     end
 
-    assert {:error, :bad_request} = RanchSocketConnection.query("")
-    assert {:error, :bad_request} = RanchSocketConnection.write(point)
+    assert {:error, %Req.HTTPError{}} = RanchSocketConnection.query("")
+    assert {:error, %Req.HTTPError{}} = RanchSocketConnection.write(point)
 
     :ranch.stop_listener(:instream_body_read_test)
   end

@@ -42,7 +42,7 @@ if version in ["2.0", "2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "cloud"] 
 
   config =
     if "cloud" == version do
-      Keyword.merge(config, http_opts: [recv_timeout: 10_000])
+      Keyword.merge(config, http_opts: [receive_timeout: 10_000])
     else
       config
     end
